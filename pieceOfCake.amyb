@@ -1,0 +1,751 @@
+byte instructions[] = {
+    // // Piece of Cake Kattis problem
+    // // Solution in AmyAssembly
+    // // By Amy Burnett
+    // //========================================================================
+
+    // // start at main
+    //     jump main
+        OPCODE_LUI,     0x00, 0xf4, 0x03, // [0x00] r0 <- 0x03f4
+        OPCODE_LLI,     0x00, 0x00, 0x00, // [0x04] r0 <- 0x0000
+        OPCODE_JMP,     0x00, 0x00, 0x00, // [0x08] jump to main 0x3f4
+
+    // //========================================================================
+    // // converts string range to integer
+    // // param1 - string pointer
+    // // param2 - starting position to read int from
+    // // param3 - end position to stop reading 
+    // int stringToInt (char[] string, int start, int end);
+    // stringToInt:
+        // function prologue 
+        OPCODE_PUSH,    0xe0, 0x00, 0x00, // [0x0c] push bp - save caller's bp 
+        OPCODE_ADDI,    0xef, 0x00, 0x00, // [0x10] bp <- sp + 0
+        OPCODE_PUSH,    0x00, 0x00, 0x00, // [0x14] push r0 - save caller's r0
+        OPCODE_PUSH,    0x10, 0x00, 0x00, // [0x18] push r1 - save caller's r1 
+        OPCODE_PUSH,    0x20, 0x00, 0x00, // [0x1c] push r2 - save caller's r2 
+        OPCODE_PUSH,    0x30, 0x00, 0x00, // [0x20] push r3 - save caller's r3 
+        OPCODE_PUSH,    0x40, 0x00, 0x00, // [0x24] push r4 - save caller's r4 
+        OPCODE_PUSH,    0x50, 0x00, 0x00, // [0x28] push r5 - save caller's r5 
+        OPCODE_PUSH,    0x60, 0x00, 0x00, // [0x2c] push r6 - save caller's r6 
+        OPCODE_PUSH,    0x70, 0x00, 0x00, // [0x30] push r7 - save caller's r7 
+        OPCODE_PUSH,    0x80, 0x00, 0x00, // [0x34] push r8 - save caller's r8 
+        OPCODE_PUSH,    0x90, 0x00, 0x00, // [0x38] push r9 - save caller's r9 
+    //     stackget string 0
+        OPCODE_LW,      0x0e, 0x08, 0x00, // [0x3c] r0 <- [bp+8] - arg string
+    //     stackget start 1
+        OPCODE_LW,      0x1e, 0x0c, 0x00, // [0x40] r1 <- [bp+12] - arg start
+    //     stackget end 2
+        OPCODE_LW,      0x2e, 0x10, 0x00, // [0x44] r2 <- [bp+16] - arg end
+    //     assign val 0
+        OPCODE_LUI,     0x30, 0x00, 0x00, // [0x48] r3 <- 0 - val = 0
+        OPCODE_LLI,     0x30, 0x00, 0x00, // [0x4c] r3 <- 0 - val = 0
+    //     assign i start
+        OPCODE_ADDI,    0x41, 0x00, 0x00, // [0x50] r4 <- r1 + 0 - i = start
+    // while00:
+    //     cmp i end
+    //     jge endwhile00
+        OPCODE_LUI,     0x50, 0x30, 0x02, // [0x54] r5 <- 0x0230 - endwhile00
+        OPCODE_LLI,     0x50, 0x00, 0x00, // [0x58] r5 <- 0x0000 - endwhile00
+        OPCODE_BGE,     0x42, 0x50, 0x00, // [0x5c] if r4 >= r2 then pc <- r5 - endwhile00
+
+    //     // shift nums
+    //     multiply val val 10
+        OPCODE_MULI,    0x33, 0x0a, 0x00, // [0x60] r3 <- r3 * 10
+
+        OPCODE_ADD,     0x60, 0x40, 0x00, // [0x64] r6 <- r0 + r4 - string + i
+        OPCODE_LB,      0x76, 0x00, 0x00, // [0x68] r7 <- [r6 + 0] - r7 = string[i]
+    //     cmp string[i] '1'
+    //     jneq notOne
+        OPCODE_LUI,     0x90,  '1', 0x00, // [0x6c] r9 <- '1' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0x70] r9 <- '1' 
+        OPCODE_LUI,     0x80, 0x90, 0x00, // [0x74] r8 <- 0x0090 - notOne
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x78] r8 <- 0x0000 - notOne
+        OPCODE_BNE,     0x79, 0x80, 0x00, // [0x7c] if r7 != r9 then pc <- r8
+    //     add val val 1 
+        OPCODE_ADDI,    0x33, 0x01, 0x00, // [0x80] r3 <- r3 + 1 - val += 1
+    //     jump continue
+        OPCODE_LUI,     0x80, 0x20, 0x02, // [0x84] r8 <- 0x0220 - continue
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x88] r8 <- 0x0000 - continue
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0x8c] jump continue
+    // notOne:
+    //     cmp string[i] '2'
+    //     jneq notTwo
+        OPCODE_LUI,     0x90,  '2', 0x00, // [0x90] r9 <- '2' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0x94] r9 <- '2' 
+        OPCODE_LUI,     0x80, 0xb4, 0x00, // [0x98] r8 <- 0x00b4 - notTwo
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x9c] r8 <- 0x0000 - notTwo
+        OPCODE_BNE,     0x79, 0x80, 0x00, // [0xa0] if r7 != r9 then pc <- r8
+    //     add val val 2 
+        OPCODE_ADDI,    0x33, 0x02, 0x00, // [0xa4] r3 <- r3 + 2 - val += 2
+    //     jump continue
+        OPCODE_LUI,     0x80, 0x20, 0x02, // [0xa8] r8 <- 0x0220 - continue
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0xac] r8 <- 0x0000 - continue
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0xb0] jump continue
+    // notTwo:
+    //     cmp string[i] '3'
+    //     jneq notThree
+        OPCODE_LUI,     0x90,  '3', 0x00, // [0xb4] r9 <- '3' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0xb8] r9 <- '3' 
+        OPCODE_LUI,     0x80, 0xd8, 0x00, // [0xbc] r8 <- 0x00d8 - notThree
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0xc0] r8 <- 0x0000 - notThree
+        OPCODE_BNE,     0x79, 0x80, 0x00, // [0xc4] if r7 != r9 then pc <- r8
+    //     add val val 3 
+        OPCODE_ADDI,    0x33, 0x03, 0x00, // [0xc8] r3 <- r3 + 3 - val += 3
+    //     jump continue
+        OPCODE_LUI,     0x80, 0x20, 0x02, // [0xcc] r8 <- 0x0220 - continue
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0xd0] r8 <- 0x0000 - continue
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0xd4] jump continue
+    // notThree:
+    //     cmp string[i] '4'
+    //     jneq notFour
+        OPCODE_LUI,     0x90,  '4', 0x00, // [0xd8] r9 <- '4' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0xdc] r9 <- '4' 
+        OPCODE_LUI,     0x80, 0xfc, 0x00, // [0xe0] r8 <- 0x00fc - notFour
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0xe4] r8 <- 0x0000 - notFour
+        OPCODE_BNE,     0x79, 0x80, 0x00, // [0xe8] if r7 != r9 then pc <- r8
+    //     add val val 4 
+        OPCODE_ADDI,    0x33, 0x04, 0x00, // [0xec] r3 <- r3 + 4 - val += 4
+    //     jump continue
+        OPCODE_LUI,     0x80, 0x20, 0x02, // [0xf0] r8 <- 0x0220 - continue
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0xf4] r8 <- 0x0000 - continue
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0xf8] jump continue
+    // notFour:
+    //     cmp string[i] '5'
+    //     jneq notFive
+        OPCODE_LUI,     0x90,  '5', 0x00, // [0xfc] r9 <- '5' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0x100] r9 <- '5' 
+        OPCODE_LUI,     0x80, 0x20, 0x01, // [0x104] r8 <- 0x0120 - notFive
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x108] r8 <- 0x0000 - notFive
+        OPCODE_BNE,     0x79, 0x80, 0x00, // [0x10c] if r7 != r9 then pc <- r8
+    //     add val val 5 
+        OPCODE_ADDI,    0x33, 0x05, 0x00, // [0x110] r3 <- r3 + 5 - val += 5
+    //     jump continue
+        OPCODE_LUI,     0x80, 0x20, 0x02, // [0x114] r8 <- 0x0220 - continue
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x118] r8 <- 0x0000 - continue
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0x11c] jump continue
+    // notFive:
+    //     cmp string[i] '6'
+    //     jneq notSix
+        OPCODE_LUI,     0x90,  '6', 0x00, // [0x120] r9 <- '6' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0x124] r9 <- '6' 
+        OPCODE_LUI,     0x80, 0x44, 0x01, // [0x128] r8 <- 0x0144 - notSix
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x12c] r8 <- 0x0000 - notSix
+        OPCODE_BNE,     0x79, 0x80, 0x00, // [0x130] if r7 != r9 then pc <- r8
+    //     add val val 6 
+        OPCODE_ADDI,    0x33, 0x06, 0x00, // [0x134] r3 <- r3 + 6 - val += 6
+    //     jump continue
+        OPCODE_LUI,     0x80, 0x20, 0x02, // [0x138] r8 <- 0x0220 - continue
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x13c] r8 <- 0x0000 - continue
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0x140] jump continue
+    // notSix:
+    //     cmp string[i] '7'
+    //     jneq notSeven
+        OPCODE_LUI,     0x90,  '7', 0x00, // [0x144] r9 <- '7' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0x148] r9 <- '7' 
+        OPCODE_LUI,     0x80, 0x68, 0x01, // [0x14c] r8 <- 0x0168 - notSeven
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x150] r8 <- 0x0000 - notSeven
+        OPCODE_BNE,     0x79, 0x80, 0x00, // [0x154] if r7 != r9 then pc <- r8
+    //     add val val 7 
+        OPCODE_ADDI,    0x33, 0x07, 0x00, // [0x158] r3 <- r3 + 7 - val += 7
+    //     jump continue
+        OPCODE_LUI,     0x80, 0x20, 0x02, // [0x15c] r8 <- 0x0220 - continue
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x160] r8 <- 0x0000 - continue
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0x164] jump continue
+    // notSeven:
+    //     cmp string[i] '8'
+    //     jneq notEight
+        OPCODE_LUI,     0x90,  '8', 0x00, // [0x168] r9 <- '8' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0x16c] r9 <- '8' 
+        OPCODE_LUI,     0x80, 0x8c, 0x01, // [0x170] r8 <- 0x018c - notEight
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x174] r8 <- 0x0000 - notEight
+        OPCODE_BNE,     0x79, 0x80, 0x00, // [0x178] if r7 != r9 then pc <- r8
+    //     add val val 8 
+        OPCODE_ADDI,    0x33, 0x08, 0x00, // [0x17c] r3 <- r3 + 8 - val += 8
+    //     jump continue
+        OPCODE_LUI,     0x80, 0x20, 0x02, // [0x180] r8 <- 0x0220 - continue
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x184] r8 <- 0x0000 - continue
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0x188] jump continue
+    // notEight:
+    //     cmp string[i] '9'
+    //     jneq notNine
+        OPCODE_LUI,     0x90,  '9', 0x00, // [0x18c] r9 <- '9' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0x190] r9 <- '9' 
+        OPCODE_LUI,     0x80, 0xb0, 0x01, // [0x194] r8 <- 0x01b0 - notNine
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x198] r8 <- 0x0000 - notNine
+        OPCODE_BNE,     0x79, 0x80, 0x00, // [0x19c] if r7 != r9 then pc <- r8
+    //     add val val 9 
+        OPCODE_ADDI,    0x33, 0x09, 0x00, // [0x1a0] r3 <- r3 + 9 - val += 9
+    //     jump continue
+        OPCODE_LUI,     0x80, 0x20, 0x02, // [0x1a4] r8 <- 0x0220 - continue
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x1a8] r8 <- 0x0000 - continue
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0x1ac] jump continue
+    // notNine:
+    //     cmp string[i] '0'
+    //     jneq error
+        OPCODE_LUI,     0x90,  '0', 0x00, // [0x1b0] r9 <- '0' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0x1b4] r9 <- '0' 
+        OPCODE_LUI,     0x80, 0xd4, 0x01, // [0x1b8] r8 <- 0x01d4 - error
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x1bc] r8 <- 0x0000 - error
+        OPCODE_BNE,     0x79, 0x80, 0x00, // [0x1c0] if r7 != r9 then pc <- r8
+    //     add val val 0 
+        OPCODE_ADDI,    0x33, 0x00, 0x00, // [0x1c4] r3 <- r3 + 0 - val += 0
+    //     jump continue
+        OPCODE_LUI,     0x80, 0x20, 0x02, // [0x1c8] r8 <- 0x0220 - continue
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x1cc] r8 <- 0x0000 - continue
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0x1d0] jump continue
+    // error:
+    //     print 'e'
+        OPCODE_LUI,     0x90,  'e', 0x00, // [0x1d4] r9 <- 'e' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0x1d8] r9 <- 'e' 
+        OPCODE_PUTCHAR, 0x90, 0x00, 0x00, // [0x1dc] putchar(r9)
+    //     print 'r'
+        OPCODE_LUI,     0x90,  'r', 0x00, // [0x1e0] r9 <- 'r' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0x1e4] r9 <- 'r' 
+        OPCODE_PUTCHAR, 0x90, 0x00, 0x00, // [0x1e8] putchar(r9)
+    //     print 'r'
+        OPCODE_LUI,     0x90,  'r', 0x00, // [0x1ec] r9 <- 'r' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0x1f0] r9 <- 'r' 
+        OPCODE_PUTCHAR, 0x90, 0x00, 0x00, // [0x1f4] putchar(r9)
+    //     print 'o'
+        OPCODE_LUI,     0x90,  'o', 0x00, // [0x1f8] r9 <- 'o' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0x1fc] r9 <- 'o' 
+        OPCODE_PUTCHAR, 0x90, 0x00, 0x00, // [0x200] putchar(r9)
+    //     println 'r'
+        OPCODE_LUI,     0x90,  'r', 0x00, // [0x204] r9 <- 'r' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0x208] r9 <- 'r' 
+        OPCODE_PUTCHAR, 0x90, 0x00, 0x00, // [0x20c] putchar(r9)
+        OPCODE_LUI,     0x90, '\n', 0x00, // [0x210] r9 <- '\n' 
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0x214] r9 <- '\n' 
+        OPCODE_PUTCHAR, 0x90, 0x00, 0x00, // [0x218] putchar(r9)
+    //     println string[i]
+    //     halt 
+        OPCODE_HLT,     0x90, 0x00, 0x00, // [0x21c] exit program
+    // continue:
+    //     add i i 1
+        OPCODE_ADDI,    0x44, 0x01, 0x00, // [0x220] r4 <- r4 + 1 - ++i
+    //     jump while00
+        OPCODE_LUI,     0x80, 0x54, 0x00, // [0x224] r8 <- 0x0054 - while00
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x228] r8 <- 0x0000 - while00
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0x22c] jump while00
+    // endwhile00:
+    //     return val 
+        OPCODE_ADDI,    0xd3, 0x00, 0x00, // [0x230] ra <- r3 + 0
+        // function epilogue 
+        OPCODE_POP,     0x90, 0x00, 0x00, // [0x234] pop r9 - restore caller's r9
+        OPCODE_POP,     0x80, 0x00, 0x00, // [0x238] pop r8 - restore caller's r8
+        OPCODE_POP,     0x70, 0x00, 0x00, // [0x23c] pop r7 - restore caller's r7
+        OPCODE_POP,     0x60, 0x00, 0x00, // [0x240] pop r6 - restore caller's r6
+        OPCODE_POP,     0x50, 0x00, 0x00, // [0x244] pop r5 - restore caller's r5
+        OPCODE_POP,     0x40, 0x00, 0x00, // [0x248] pop r4 - restore caller's r4
+        OPCODE_POP,     0x30, 0x00, 0x00, // [0x24c] pop r3 - restore caller's r3
+        OPCODE_POP,     0x20, 0x00, 0x00, // [0x250] pop r2 - restore caller's r2
+        OPCODE_POP,     0x10, 0x00, 0x00, // [0x254] pop r1 - restore caller's r1
+        OPCODE_POP,     0x00, 0x00, 0x00, // [0x258] pop r0 - restore caller's r0 
+        OPCODE_ADDI,    0xfe, 0x00, 0x00, // [0x25c] sp <- bp - remove local vars 
+        OPCODE_POP,     0xe0, 0x00, 0x00, // [0x260] bp <- [sp] - restore caller bp
+        OPCODE_RET,     0x00, 0x00, 0x00, // [0x264] return from function
+    // endstringToInt
+        // 0x00,           0x00, 0x00, 0x00, // [0x228] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x22c] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x230] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x234] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x238] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x23c] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x240] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x244] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x248] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x24c] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x250] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x254] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x258] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x25c] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x260] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x264] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x268] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x26c] fluff bytes 
+
+    // //========================================================================
+    // // returns the larger of the given two parameters 
+    // int max(int a, int b);
+    // max: 
+        // function prologue 
+        OPCODE_PUSH,    0xe0, 0x00, 0x00, // [0x270] push bp - save caller's bp 
+        OPCODE_ADDI,    0xef, 0x00, 0x00, // [0x274] bp <- sp + 0
+        OPCODE_PUSH,    0x00, 0x00, 0x00, // [0x278] push r0 - save caller's r0
+        OPCODE_PUSH,    0x10, 0x00, 0x00, // [0x27c] push r1 - save caller's r1 
+        OPCODE_PUSH,    0x80, 0x00, 0x00, // [0x280] push r8 - save caller's r8 
+    //     stackget a 0
+        OPCODE_LW,      0x0e, 0x08, 0x00, // [0x284] r0 <- [bp+8] - arg a
+    //     stackget b 1
+        OPCODE_LW,      0x1e, 0x0c, 0x00, // [0x288] r1 <- [bp+12] - arg b
+    //     cmp a b
+    //     jge greater
+        OPCODE_LUI,     0x80, 0xa8, 0x02, // [0x28c] r8 <- 0x02a8 - greater
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x290] r8 <- 0x0000 - greater
+        OPCODE_BGT,     0x01, 0x80, 0x00, // [0x294] if r0 > r1 then pc <- r8
+    //     return b
+        OPCODE_ADDI,    0xd1, 0x00, 0x00, // [0x298] ra <- r1 + 0
+        OPCODE_LUI,     0x80, 0xb8, 0x02, // [0x29c] r8 <- 0x02b8 - epilogue
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x2a0] r8 <- 0x0000 - epilogue
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0x2a4] pc <- r8
+    // greater:
+    //     return a
+        OPCODE_ADDI,    0xd0, 0x00, 0x00, // [0x2a8] ra <- r0 + 0
+        OPCODE_LUI,     0x80, 0xb8, 0x02, // [0x2ac] r8 <- 0x02b8 - epilogue
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x2b0] r8 <- 0x0000 - epilogue
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0x2b4] pc <- r8
+    // epilogue:
+        // function epilogue 
+        OPCODE_POP,     0x80, 0x00, 0x00, // [0x2b8] pop r8 - restore caller's r8
+        OPCODE_POP,     0x10, 0x00, 0x00, // [0x2bc] pop r1 - restore caller's r1
+        OPCODE_POP,     0x00, 0x00, 0x00, // [0x2c0] pop r0 - restore caller's r0 
+        OPCODE_ADDI,    0xfe, 0x00, 0x00, // [0x2c4] sp <- bp - remove local vars 
+        OPCODE_POP,     0xe0, 0x00, 0x00, // [0x2c8] bp <- [sp] - restore caller bp
+        OPCODE_RET,     0x00, 0x00, 0x00, // [0x2cc] return from function
+    // endmax
+        0x00,           0x00, 0x00, 0x00, // [0x2d0] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x2d4] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x2d8] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x2dc] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x2e0] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x2e4] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x2e8] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x2ec] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x2f0] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x2f4] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x2f8] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x2fc] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x300] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x304] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x308] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x30c] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x310] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x314] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x318] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x31c] fluff bytes 
+
+    // //========================================================================
+
+    // reads until newline [or EOF - not implemented]
+    // void getline (char buf[]);
+    // getline:
+        // function prologue 
+        OPCODE_PUSH,    0xe0, 0x00, 0x00, // [0x320] push bp - save caller's bp 
+        OPCODE_ADDI,    0xef, 0x00, 0x00, // [0x324] bp <- sp + 0
+        OPCODE_PUSH,    0x00, 0x00, 0x00, // [0x328] push r0 - save caller's r0
+        OPCODE_PUSH,    0x10, 0x00, 0x00, // [0x32c] push r1 - save caller's r1 
+        OPCODE_PUSH,    0x20, 0x00, 0x00, // [0x330] push r2 - save caller's r2
+        OPCODE_PUSH,    0x60, 0x00, 0x00, // [0x334] push r6 - save caller's r6
+        OPCODE_PUSH,    0x70, 0x00, 0x00, // [0x338] push r7 - save caller's r7
+        OPCODE_PUSH,    0x80, 0x00, 0x00, // [0x33c] push r8 - save caller's r8 
+        // function body
+    // char buf[80]; 
+        // buffer array is passed as param
+        OPCODE_LW,      0x7e, 0x08, 0x00, // [0x340] r7 <- [bp+8] - arg buf
+    // int i = 0; 
+        OPCODE_LUI,     0x00, 0x00, 0x00, // [0x344] r0 <- 0x0000 - i
+        OPCODE_LLI,     0x00, 0x00, 0x00, // [0x348] r0 <- 0x0000 - i
+    // char c = getchar();
+        OPCODE_GETCHAR, 0x10, 0x00, 0x00, // [0x34c] r1 <- getchar()
+    // getline_while (c != '\n')
+    // {
+        OPCODE_LUI,     0x20, '\n', 0x00, // [0x350] r2 <- '\n'
+        OPCODE_LLI,     0x20, 0x00, 0x00, // [0x354] r2 <- '\n'
+        OPCODE_LUI,     0x80, 0x80, 0x03, // [0x358] r8 <- 0x0380 - getline_endwhile
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x35c] r8 <- 0x0000 - getline_endwhile
+        OPCODE_BEQ,     0x12, 0x80, 0x00, // [0x360] if r1 == r2 then pc <- r8
+    //     buf[i] = c;
+        OPCODE_ADD,     0x67, 0x00, 0x00, // [0x364] r6 <- r7 + r0 -  buf+i
+        OPCODE_SB,      0x61, 0x00, 0x00, // [0x368] [r6+0] <- c 
+    //     i += 1;
+        OPCODE_ADDI,    0x00, 0x01, 0x00, // [0x36c] r0 <- r0 + 1
+    //     c = getchar();
+        OPCODE_GETCHAR, 0x10, 0x00, 0x00, // [0x370] r1 <- getchar()
+    // }
+        OPCODE_LUI,     0x80, 0x50, 0x03, // [0x374] r8 <- 0x0350 - getline_while
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x378] r8 <- 0x0000 - getline_while
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0x37c] pc <- r8
+    // getline_endwhile
+        // no need to return, buf has line
+        // should end in \0
+        OPCODE_LUI,     0x10, '\0', 0x00, // [0x380] r1 <- '\0'    - 
+        OPCODE_LLI,     0x10, 0x00, 0x00, // [0x384] r1 <- 0x0000  - 
+        OPCODE_ADD,     0x67, 0x00, 0x00, // [0x388] r6 <- r7 + r0 - buf+i
+        OPCODE_SB,      0x61, 0x00, 0x00, // [0x38c] [r6+0] <- r1  - buf[i] = '\0'
+
+        // function epilogue 
+        OPCODE_POP,     0x80, 0x00, 0x00, // [0x390] pop r8 - restore caller's r8
+        OPCODE_POP,     0x70, 0x00, 0x00, // [0x394] pop r7 - restore caller's r7
+        OPCODE_POP,     0x60, 0x00, 0x00, // [0x398] pop r6 - restore caller's r6
+        OPCODE_POP,     0x20, 0x00, 0x00, // [0x39c] pop r2 - restore caller's r2
+        OPCODE_POP,     0x10, 0x00, 0x00, // [0x3a0] pop r1 - restore caller's r1
+        OPCODE_POP,     0x00, 0x00, 0x00, // [0x3a4] pop r0 - restore caller's r0 
+        OPCODE_ADDI,    0xfe, 0x00, 0x00, // [0x3a8] sp <- bp - remove local vars 
+        OPCODE_POP,     0xe0, 0x00, 0x00, // [0x3ac] bp <- [sp] - restore caller bp
+        OPCODE_RET,     0x00, 0x00, 0x00, // [0x3b0] return from function
+    // endgetline
+        // 0x00,           0x00, 0x00, 0x00, // [0x3a4] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x3a8] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x3ac] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x3b0] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3b4] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3b8] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3bc] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3c0] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3c4] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3c8] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3cc] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3d0] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3d4] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3d8] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3dc] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3e0] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3e4] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3e8] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3ec] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x3f0] fluff bytes 
+
+    // //========================================================================
+
+    // main:
+        // function prologue 
+        OPCODE_PUSH,    0xe0, 0x00, 0x00, // [0x3f4] push bp - save caller's bp 
+        OPCODE_ADDI,    0xef, 0x00, 0x00, // [0x3f8] bp <- sp + 0
+        OPCODE_SUBI,    0xff, 0x0c, 0x00, // [0x3fc] sp <- sp - 3*4 allocate local vars
+        // [bp-4]  : n 
+        // [bp-8]  : h 
+        // [bp-12] : v  
+        OPCODE_PUSH,    0x00, 0x00, 0x00, // [0x400] push r0 - save caller's r0
+        OPCODE_PUSH,    0x10, 0x00, 0x00, // [0x404] push r1 - save caller's r1 
+        OPCODE_PUSH,    0x20, 0x00, 0x00, // [0x408] push r2 - save caller's r2
+        OPCODE_PUSH,    0x60, 0x00, 0x00, // [0x40c] push r6 - save caller's r6
+        OPCODE_PUSH,    0x70, 0x00, 0x00, // [0x410] push r7 - save caller's r7
+        OPCODE_PUSH,    0x80, 0x00, 0x00, // [0x414] push r8 - save caller's r8 
+
+    //     char buf[80]; - on stack 
+        OPCODE_SUBI,    0xff, 0x50, 0x00, // [0x418] sp <- sp - 80
+        OPCODE_ADDI,    0x0f, 0x00, 0x00, // [0x41c] r0 <- sp + 0  - r0 is buf pointer
+    //     call getline (buf)
+        OPCODE_LUI,     0x80, 0x20, 0x03, // [0x420] r8 <- 0x0320 - getline addr
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x424] r8 <- 0x0000 - getline addr
+        OPCODE_PUSH,    0x00, 0x00, 0x00, // [0x428] push r0 - push buf (arg0) 
+        OPCODE_CALL,    0x80, 0x00, 0x00, // [0x42c] call r8 - call getline 
+        OPCODE_POP,     0x00, 0x00, 0x00, // [0x430] pop r0  - pop arg0 
+
+
+
+    //     // break up line into the three nums
+    //     assign begin1 0
+        OPCODE_LUI,     0x10, 0x00, 0x00, // [0x434] r1 <- 0x0000 - begin1
+        OPCODE_LLI,     0x10, 0x00, 0x00, // [0x438] r1 <- 0x0000 - begin1
+    //     assign end1 0
+        OPCODE_LUI,     0x20, 0x00, 0x00, // [0x43c] r2 <- 0x0000 - end1
+        OPCODE_LLI,     0x20, 0x00, 0x00, // [0x440] r2 <- 0x0000 - end1
+    // while01:
+    //     cmp line[end1] ' '
+    //     jeq endwhile01
+        OPCODE_ADD,     0x30, 0x20, 0x00, // [0x444] r3 <- r0 + r2 - line + end1
+        OPCODE_LB,      0x43, 0x00, 0x00, // [0x448] r4 <- [r3 + 0] - mem[line + end1]
+        OPCODE_LUI,     0x50,  ' ', 0x00, // [0x44c] r5 <- ' '  
+        OPCODE_LLI,     0x50, 0x00, 0x00, // [0x450] r5 <- ' ' 
+        OPCODE_LUI,     0x80, 0x70, 0x04, // [0x454] r8 <- 0x0470 - endwhile01
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x458] r8 <- 0x0000 - endwhile01
+        OPCODE_BEQ,     0x45, 0x80, 0x00, // [0x45c] if r4 == r5 then pc <- r8
+
+    //     add end1 end1 1 
+        OPCODE_ADDI,    0x22, 0x01, 0x00, // [0x460] r2 <- r2 + 1 - ++end1
+        // repeat
+    //     jump while01
+        OPCODE_LUI,     0x80, 0x44, 0x04, // [0x464] r8 <- 0x0444 - while01
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x468] r8 <- 0x0000 - while01
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0x46c] pc <- r8
+    // endwhile01: 
+
+    //     add begin2 end1 1
+        OPCODE_ADDI,    0x32, 0x01, 0x00, // [0x470] r3 <- r2 + 1 - begin2 = end1+1
+    //     assign end2 begin2
+        OPCODE_ADDI,    0x43, 0x00, 0x00, // [0x474] r4 <- r3 + 0 - end2 = begin2
+    // while02:
+    //     cmp line[end2] ' '
+    //     jeq endwhile02
+        OPCODE_ADD,     0x50, 0x40, 0x00, // [0x478] r5 <- r0 + r4 - line + end2
+        OPCODE_LB,      0x65, 0x00, 0x00, // [0x47c] r6 <- [r5 + 0] - mem[line + end2]
+        OPCODE_LUI,     0x70,  ' ', 0x00, // [0x480] r7 <- ' '  
+        OPCODE_LLI,     0x70, 0x00, 0x00, // [0x484] r7 <- ' ' 
+        OPCODE_LUI,     0x80, 0xa4, 0x04, // [0x488] r8 <- 0x04a4 - endwhile02
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x48c] r8 <- 0x0000 - endwhile02
+        OPCODE_BEQ,     0x67, 0x80, 0x00, // [0x490] if r6 == r7 then pc <- r8
+
+    //     add end2 end2 1 
+        OPCODE_ADDI,    0x44, 0x01, 0x00, // [0x494] r4 <- r4 + 1 - ++end2
+        // repeat
+    //     jump while02
+        OPCODE_LUI,     0x80, 0x78, 0x04, // [0x498] r8 <- 0x0478 - while02
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x49c] r8 <- 0x0000 - while02
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0x4a0] pc <- r8
+    // endwhile02: 
+
+    //     add begin3 end2 1
+        OPCODE_ADDI,    0x54, 0x01, 0x00, // [0x4a4] r5 <- r4 + 1 - begin3 = end2+1
+    //     sizeof end3 line
+        OPCODE_ADDI,    0x65, 0x00, 0x00, // [0x4a8] r6 <- r5 + 0 - end3 = begin3
+    // while03:
+    //     cmp line[end3] '\0'
+    //     jeq endwhile03
+        OPCODE_ADD,     0x70, 0x60, 0x00, // [0x4ac] r7 <- r0 + r6 - line + end3
+        OPCODE_LB,      0x77, 0x00, 0x00, // [0x4b0] r7 <- [r7 + 0] - mem[line + end3]
+        OPCODE_LUI,     0x90, '\0', 0x00, // [0x4b4] r9 <- '\0'  
+        OPCODE_LLI,     0x90, 0x00, 0x00, // [0x4b8] r9 <- '\0' 
+        OPCODE_LUI,     0x80, 0xd8, 0x04, // [0x4bc] r8 <- 0x04d8 - endwhile03
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x4c0] r8 <- 0x0000 - endwhile03
+        OPCODE_BEQ,     0x79, 0x80, 0x00, // [0x4c4] if r7 == r9 then pc <- r8
+
+    //     add end3 end3 1 
+        OPCODE_ADDI,    0x66, 0x01, 0x00, // [0x4c8] r6 <- r6 + 1 - ++end3
+        // repeat
+    //     jump while03
+        OPCODE_LUI,     0x80, 0xac, 0x04, // [0x4cc] r8 <- 0x04ac - while03
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x4d0] r8 <- 0x0000 - while03
+        OPCODE_JMP,     0x80, 0x00, 0x00, // [0x4d4] pc <- r8
+    // endwhile03: 
+
+    //     push end1
+        OPCODE_PUSH,    0x20, 0x00, 0x00, // [0x4d8] push r2 - end1 
+    //     push begin1
+        OPCODE_PUSH,    0x10, 0x00, 0x00, // [0x4dc] push r1 - begin1 
+    //     push line
+        OPCODE_PUSH,    0x00, 0x00, 0x00, // [0x4e0] push r0 - line 
+    //     call stringToInt
+        OPCODE_LUI,     0x80, 0x0c, 0x00, // [0x4e4] r8 <- 0x000c - stringToInt
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x4e8] r8 <- 0x0000 - stringToInt
+        OPCODE_CALL,    0x80, 0x00, 0x00, // [0x4ec] call r8
+    //     response n
+        OPCODE_SW,      0xed, 0xfc, 0xff, // [0x4f0] [bp - 4] <- ra  0xfffc
+    //     pop null 
+        OPCODE_POP,     0xa0, 0x00, 0x00, // [0x4f4] pop r10 - line 
+    //     pop null
+        OPCODE_POP,     0xa0, 0x00, 0x00, // [0x4f8] pop r10 - begin1  
+    //     pop null
+        OPCODE_POP,     0xa0, 0x00, 0x00, // [0x4fc] pop r10 - end1 
+
+    //     push end2
+        OPCODE_PUSH,    0x40, 0x00, 0x00, // [0x500] push r4 - end2
+    //     push begin2
+        OPCODE_PUSH,    0x30, 0x00, 0x00, // [0x504] push r3 - begin2
+    //     push line
+        OPCODE_PUSH,    0x00, 0x00, 0x00, // [0x508] push r0 - line 
+    //     call stringToInt
+        OPCODE_LUI,     0x80, 0x0c, 0x00, // [0x50c] r8 <- 0x000c - stringToInt
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x510] r8 <- 0x0000 - stringToInt
+        OPCODE_CALL,    0x80, 0x00, 0x00, // [0x514] call r8
+    //     response h
+        OPCODE_SW,      0xed, 0xf8, 0xff, // [0x518] [bp - 8] <- ra   0xfff8
+    //     pop null 
+        OPCODE_POP,     0xa0, 0x00, 0x00, // [0x51c] pop r10 - line 
+    //     pop null
+        OPCODE_POP,     0xa0, 0x00, 0x00, // [0x520] pop r10 - begin2
+    //     pop null
+        OPCODE_POP,     0xa0, 0x00, 0x00, // [0x524] pop r10 - end2
+
+    //     push end3
+        OPCODE_PUSH,    0x60, 0x00, 0x00, // [0x528] push r6 - end3
+    //     push begin3
+        OPCODE_PUSH,    0x50, 0x00, 0x00, // [0x52c] push r5 - begin3
+    //     push line
+        OPCODE_PUSH,    0x00, 0x00, 0x00, // [0x530] push r0 - line 
+    //     call stringToInt
+        OPCODE_LUI,     0x80, 0x0c, 0x00, // [0x534] r8 <- 0x000c - stringToInt
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x538] r8 <- 0x0000 - stringToInt
+        OPCODE_CALL,    0x80, 0x00, 0x00, // [0x53c] call r8
+    //     response v
+        OPCODE_SW,      0xed, 0xf4, 0xff, // [0x540] [bp - 12] <- ra  0xfff4
+    //     pop null 
+        OPCODE_POP,     0xa0, 0x00, 0x00, // [0x544] pop r10 - line 
+    //     pop null
+        OPCODE_POP,     0xa0, 0x00, 0x00, // [0x548] pop r10 - begin3
+    //     pop null
+        OPCODE_POP,     0xa0, 0x00, 0x00, // [0x54c] pop r10 - end3
+
+    //     subtract nh n h
+        OPCODE_LW,      0x0e, 0xfc, 0xff, // [0x550] r0 <- [bp - 4] - n
+        OPCODE_LW,      0x1e, 0xf8, 0xff, // [0x554] r1 <- [bp - 8] - h
+        OPCODE_SUB,     0x20, 0x10, 0x00, // [0x558] r2 <- r0 - r1  - nh
+    //     subtract nv n v
+        OPCODE_LW,      0x3e, 0xf4, 0xff, // [0x55c] r3 <- [bp - 12] - v
+        OPCODE_SUB,     0x40, 0x30, 0x00, // [0x560] r4 <- r0 - r3  - nv
+
+    //     push h
+        OPCODE_PUSH,    0x10, 0x00, 0x00, // [0x564] push r1 - h
+    //     push nh
+        OPCODE_PUSH,    0x20, 0x00, 0x00, // [0x568] push r2 - nh
+    //     call max
+        OPCODE_LUI,     0x80, 0x70, 0x02, // [0x56c] r8 <- 0x0270 - max
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x570] r8 <- 0x0000 - max
+        OPCODE_CALL,    0x80, 0x00, 0x00, // [0x574] call r8
+    //     response lhs
+        OPCODE_ADDI,    0x5d, 0x00, 0x00, // [0x578] r5 <- ra + 0 - lhs 
+    //     pop null
+        OPCODE_POP,     0xa0, 0x00, 0x00, // [0x57c] pop r10 - nh
+    //     pop null
+        OPCODE_POP,     0xa0, 0x00, 0x00, // [0x580] pop r10 - h
+
+    //     push v
+        OPCODE_PUSH,    0x30, 0x00, 0x00, // [0x584] push r3 - v
+    //     push nv
+        OPCODE_PUSH,    0x40, 0x00, 0x00, // [0x588] push r4 - nv
+    //     call max 
+        OPCODE_LUI,     0x80, 0x70, 0x02, // [0x58c] r8 <- 0x0270 - max
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x590] r8 <- 0x0000 - max
+        OPCODE_CALL,    0x80, 0x00, 0x00, // [0x594] call r8
+    //     response rhs
+        OPCODE_ADDI,    0x6d, 0x00, 0x00, // [0x598] r6 <- ra + 0 - rhs 
+    //     pop null
+        OPCODE_POP,     0xa0, 0x00, 0x00, // [0x59c] pop r10 - nv
+    //     pop null
+        OPCODE_POP,     0xa0, 0x00, 0x00, // [0x5a0] pop r10 - v
+
+    //     multiply res lhs rhs
+        OPCODE_MUL,     0x05, 0x60, 0x00, // [0x5a4] r0 <- r5 * r6 - res = lhs*rhs
+    //     multiply res res 4
+        OPCODE_MULI,    0x00, 0x04, 0x00, // [0x5a8] r0 <- r0 * 4  - res *= 4
+
+    //     println res
+        OPCODE_PUSH,    0x00, 0x00, 0x00, // [0x5ac] push r0 - arg0
+        OPCODE_LUI,     0x80, 0x44, 0x06, // [0x5b0] r8 <- 0x0644 - print_int
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x5b4] r8 <- 0x0000 - print_int
+        OPCODE_CALL,    0x80, 0x00, 0x00, // [0x5b8] call r8
+        OPCODE_POP,     0x00, 0x00, 0x00, // [0x5bc] pop r0 - arg0
+
+        // function epilogue 
+        OPCODE_POP,     0x80, 0x00, 0x00, // [0x5c0] pop r8 - restore caller's r8
+        OPCODE_POP,     0x70, 0x00, 0x00, // [0x5c4] pop r7 - restore caller's r7
+        OPCODE_POP,     0x60, 0x00, 0x00, // [0x5c8] pop r6 - restore caller's r6
+        OPCODE_POP,     0x20, 0x00, 0x00, // [0x5cc] pop r2 - restore caller's r2
+        OPCODE_POP,     0x10, 0x00, 0x00, // [0x5d0] pop r1 - restore caller's r1
+        OPCODE_POP,     0x00, 0x00, 0x00, // [0x5d4] pop r0 - restore caller's r0 
+        OPCODE_ADDI,    0xfe, 0x00, 0x00, // [0x5d8] sp <- bp - remove local vars 
+        OPCODE_POP,     0xe0, 0x00, 0x00, // [0x5dc] bp <- [sp] - restore caller bp
+        OPCODE_HLT,     0x00, 0x00, 0x00, // [0x5e0] end of program
+    // endmain
+        // 0x00,           0x00, 0x00, 0x00, // [0x5d0] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x5d4] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x5d8] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x5dc] fluff bytes 
+        // 0x00,           0x00, 0x00, 0x00, // [0x5e0] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x5e4] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x5e8] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x5ec] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x5f0] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x5f4] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x5f8] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x5fc] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x600] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x604] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x608] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x60c] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x610] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x614] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x618] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x61c] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x620] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x624] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x628] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x62c] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x630] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x634] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x638] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x63c] fluff bytes 
+        0x00,           0x00, 0x00, 0x00, // [0x640] fluff bytes 
+
+    // //========================================================================
+
+    // void pr_int(int n) {
+    // if (n < 0) {
+    //     putchar('-');
+    //     n = -n;
+    // }
+    // if (n / 10 != 0)
+    //     pr_int(n / 10);
+    // putchar((n % 10) + '0');
+    // }
+    // print_int: 
+    // function prologue
+        OPCODE_PUSH,    0xe0, 0x00, 0x00, // [0x644] push bp - save caller's bp 
+        OPCODE_ADDI,    0xef, 0x00, 0x00, // [0x648] bp <- sp + 0
+        // no local vars 
+        OPCODE_PUSH,    0x00, 0x00, 0x00, // [0x64c] push r0 - save caller's r0
+        OPCODE_PUSH,    0x10, 0x00, 0x00, // [0x650] push r1 - save caller's r1 
+        OPCODE_PUSH,    0x20, 0x00, 0x00, // [0x654] push r2 - save caller's r2
+        OPCODE_PUSH,    0x60, 0x00, 0x00, // [0x658] push r6 - save caller's r6
+        OPCODE_PUSH,    0x70, 0x00, 0x00, // [0x65c] push r7 - save caller's r7
+        OPCODE_PUSH,    0x80, 0x00, 0x00, // [0x660] push r8 - save caller's r8 
+
+    // function body 
+        // stackget n 0
+        OPCODE_LW,      0x0e, 0x08, 0x00, // [0x664] r0 <- [bp+8] - arg n
+        // cmp n 0
+        // jge endif0 
+        OPCODE_LUI,     0x10, 0x00, 0x00, // [0x668] r1 <- 0x0000  
+        OPCODE_LLI,     0x10, 0x00, 0x00, // [0x66c] r1 <- 0x0000 
+        OPCODE_LUI,     0x80, 0x8c, 0x06, // [0x670] r8 <- 0x068c - endif0
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x674] r8 <- 0x0000 - endif0
+        OPCODE_BGE,     0x01, 0x80, 0x00, // [0x678] if r0 >= r1 then pc <- r8
+
+        // printchar '-'
+        OPCODE_LUI,     0x10,  '-', 0x00, // [0x67c] r1 <- '-'  
+        OPCODE_LLI,     0x10, 0x00, 0x00, // [0x680] r1 <- 0x0000 
+        OPCODE_PUTCHAR, 0x10, 0x00, 0x00, // [0x684] PUTCHAR(r1) 
+
+        // assign n -n
+        OPCODE_MULI,    0x00, 0xff, 0xff, // [0x688] r0 <- r0 * -1
+
+    // endif0:
+
+        // assign temp n 
+        OPCODE_ADDI,    0x10, 0x00, 0x00, // [0x68c] r1 <- r0 + 0
+        // div temp 10
+        OPCODE_DIVI,    0x11, 0x0a, 0x00, // [0x690] r1 <- r1 / 10
+        // cmp temp 0 
+        // jeq endif1
+        OPCODE_LUI,     0x20, 0x00, 0x00, // [0x694] r2 <- 0x0000  
+        OPCODE_LLI,     0x20, 0x00, 0x00, // [0x698] r2 <- 0x0000 
+        OPCODE_LUI,     0x80, 0xbc, 0x06, // [0x69c] r8 <- 0x06bc - endif1
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x6a0] r8 <- 0x0000 - endif1
+        OPCODE_BEQ,     0x12, 0x80, 0x00, // [0x6a4] if r0 >= r1 then pc <- r8
+
+        // push temp
+        OPCODE_PUSH,    0x10, 0x00, 0x00, // [0x6a8] push r1 - arg0
+        // call pr_int
+        OPCODE_LUI,     0x80, 0x44, 0x06, // [0x6ac] r8 <- 0x0644 - print_int
+        OPCODE_LLI,     0x80, 0x00, 0x00, // [0x6b0] r8 <- 0x0000 - print_int
+        OPCODE_CALL,    0x80, 0x00, 0x00, // [0x6b4] call r8
+        // pop temp 
+        OPCODE_POP,     0x10, 0x00, 0x00, // [0x6b8] pop r1 - arg0
+
+    // endif1
+
+        // assign temp n 
+        OPCODE_ADDI,    0x10, 0x00, 0x00, // [0x6bc] r1 <- r0 + 0
+        // mod temp temp 10
+        OPCODE_MODI,    0x11, 0x0a, 0x00, // [0x6c0] modi r1 r1 10
+        // add temp temp '0'
+        OPCODE_ADDI,    0x11,  '0', 0x00, // [0x6c4] r1 <- r1 + '0'
+
+        // printchar temp
+        OPCODE_PUTCHAR, 0x10, 0x00, 0x00, // [0x6c8] PUTCHAR(r1) 
+
+    // function epilogue 
+        OPCODE_POP,     0x80, 0x00, 0x00, // [0x6cc] pop r8 - restore caller's r8
+        OPCODE_POP,     0x70, 0x00, 0x00, // [0x6d0] pop r7 - restore caller's r7
+        OPCODE_POP,     0x60, 0x00, 0x00, // [0x6d4] pop r6 - restore caller's r6
+        OPCODE_POP,     0x20, 0x00, 0x00, // [0x6d8] pop r2 - restore caller's r2
+        OPCODE_POP,     0x10, 0x00, 0x00, // [0x6dc] pop r1 - restore caller's r1
+        OPCODE_POP,     0x00, 0x00, 0x00, // [0x6e0] pop r0 - restore caller's r0 
+        OPCODE_ADDI,    0xfe, 0x00, 0x00, // [0x6e4] sp <- bp - remove local vars 
+        OPCODE_POP,     0xe0, 0x00, 0x00, // [0x6e8] bp <- [sp] - restore caller bp
+        OPCODE_RET,     0x00, 0x00, 0x00, // [0x6ec] end of function
+
+    // endprint_int:
+
+
+    };

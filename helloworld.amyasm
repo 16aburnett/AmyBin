@@ -1,0 +1,49 @@
+// Hello World writtin in AmyAssembly32
+//========================================================================
+
+.section .text 
+
+    call    main           // main starts the program
+
+main:
+    // function prologue 
+    push    bp             //  push bp - save caller's bp (r14)
+    addi    bp, 0(sp)      //  bp <- sp + 0
+    subi    sp, sp, 0      //  sp <- sp-0 - allocate local vars
+    push    r0             //  push r0 - save caller's r0
+    push    r1             //  push r1 - save caller's r1 
+    push    r2             //  push r2 - save caller's r2
+    push    r3             //  push r2 - save caller's r3
+    push    r4             //  push r2 - save caller's r4
+    push    r5             //  push r2 - save caller's r5
+    push    r6             //  push r6 - save caller's r6
+    push    r7             //  push r7 - save caller's r7
+    push    r8             //  push r8 - save caller's r8 
+
+    // function body 
+    
+
+
+
+
+    // function epilogue 
+    pop     r8             // pop r8 - restore caller's r8
+    pop     r7             // pop r7 - restore caller's r7
+    pop     r6             // pop r6 - restore caller's r6
+    pop     r5             // pop r2 - restore caller's r5
+    pop     r4             // pop r2 - restore caller's r4
+    pop     r3             // pop r2 - restore caller's r3
+    pop     r2             // pop r2 - restore caller's r2
+    pop     r1             // pop r1 - restore caller's r1
+    pop     r0             // pop r0 - restore caller's r0 
+    addi    sp, bp, 0      // sp <- bp - remove local vars 
+    pop     bp             // bp <- [sp] - restore caller bp
+    ret                    // end of program
+//endmain:
+
+
+// static data 
+//========================================================================
+.section .rodata
+msg:
+    .string  "Hello, World!\n"
